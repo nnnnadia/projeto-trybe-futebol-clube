@@ -18,8 +18,10 @@ TeamModel.init({
     type: STRING,
   },
 }, {
-  sequelize: db,
   modelName: 'teams',
+  sequelize: db,
   timestamps: false,
   underscored: true,
 });
+
+export default TeamModel;
