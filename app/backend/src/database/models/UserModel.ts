@@ -11,30 +11,30 @@ class UserModel extends Model {
 
 UserModel.init({
   id: {
-    type: INTEGER,
     allowNull: false,
-    primaryKey: true,
     autoIncrement: true,
+    primaryKey: true,
+    type: INTEGER,
   },
   username: {
-    type: STRING,
     allowNull: false,
+    type: STRING,
   },
   role: {
-    type: STRING,
     allowNull: false,
+    type: STRING,
   },
   email: {
-    type: STRING,
     allowNull: false,
+    type: STRING,
   },
   password: {
-    type: STRING,
     allowNull: false,
+    type: STRING,
   },
 }, {
-  sequelize: db,
   modelName: 'users',
+  sequelize: db,
   timestamps: false,
 });
 
