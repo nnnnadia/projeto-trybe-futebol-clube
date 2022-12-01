@@ -18,4 +18,10 @@ export default class AuthJWT {
       AuthJWT.jwtConfig,
     );
   };
+
+  static validateToken = (token: string) =>
+    jwt.verify(token, AuthJWT.secretKey);
+
+  static retrieveTokenData = (token: string): jwt.JwtPayload =>
+    jwt.decode(token) as jwt.JwtPayload;
 }
