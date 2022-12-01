@@ -1,12 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
+import StatusError from '../utils/StatusError';
 
 export default class ErrorController {
   static handler = (
-    err: Error,
+    err: StatusError,
     _req: Request,
     res: Response,
     _next: NextFunction,
   ) => {
-    res.status(500).json(err.message);
+    res.status(err.status).json(err.message);
   };
 }
