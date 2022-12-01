@@ -1,9 +1,15 @@
 import { Router } from 'express';
+import LoginFieldsMiddleware from '../middlewares/LoginFieldsMiddleware';
 import AuthLoginMiddleware from '../middlewares/AuthLoginMiddleware';
 import UserController from '../controllers/UserController';
 
 const login = Router();
 
-login.post('/', AuthLoginMiddleware.checkPassword, UserController.login);
+login.post(
+  '/',
+  LoginFieldsMiddleware.checkEmptyFields,
+  AuthLoginMiddleware.checkPassword,
+  UserController.login,
+);
 
 export default login;
