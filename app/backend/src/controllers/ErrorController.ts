@@ -8,6 +8,6 @@ export default class ErrorController {
     res: Response,
     _next: NextFunction,
   ) => {
-    res.status(err.status).json(err.message);
+    res.status(err.status).json({ message: err.message });
   };
 }
