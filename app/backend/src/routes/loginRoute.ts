@@ -12,4 +12,9 @@ login.post(
   UserController.login,
 );
 
+login.get(
+  '/validate',
+  UserController.getLoginValidation,
+);
+
 export default login;
