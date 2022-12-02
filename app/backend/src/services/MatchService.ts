@@ -12,7 +12,21 @@ export default class MatchService {
       });
       return matches;
     } catch (error) {
-      console.log(error);
+      throw new StatusError(500, 'Internal error');
+    }
+  };
+
+  static findMatchesInProgress = async (inProgress: boolean) => {
+    try {
+      const matches = await MatchModel.findAll({
+        where: { inProgress },
+        include: [{
+          all: true,
+          attributes: { exclude: ['id'] },
+        }],
+      });
+      return matches;
+    } catch (error) {
       throw new StatusError(500, 'Internal error');
     }
   };
