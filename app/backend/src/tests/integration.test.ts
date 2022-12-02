@@ -2,12 +2,14 @@ import * as chai from 'chai';
 import App from '../app';
 // @ts-ignore
 import chaiHttp = require('chai-http');
+import { teams, tokenRegexp } from './mockTeams';
 
 chai.use(chaiHttp);
 
 const { app } = new App();
 
 const { expect } = chai;
+
 describe('Testes de rota', () => {
   describe('POST: /login', () => {
     it('Quando o email e a senha estão corretos\n\tStatus: 200;\n\tRespose body: { token };\n', async () => {
@@ -18,7 +20,7 @@ describe('Testes de rota', () => {
           email: 'user@user.com',
           password: 'secret_user',
         });
-      expect(response.body.token).to.match(/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9/);
+      expect(response.body.token).to.match(tokenRegexp);
       expect(response.status).to.be.equal(200);
     });
 
