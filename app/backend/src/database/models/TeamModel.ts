@@ -15,6 +15,7 @@ TeamModel.init({
   },
   teamName: {
     allowNull: false,
+    field: 'team_name',
     type: STRING,
   },
 }, {
