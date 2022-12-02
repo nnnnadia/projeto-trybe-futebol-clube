@@ -1,12 +1,26 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import MatchService from '../services/MatchService';
 
 export default class MatchController {
   static findMatches = async (
-    _req: Request,
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) => {
+    const { inProgress } = req.query;
+    if (inProgress) next();
+    const matches = await MatchService.findMatches();
+    return res.status(200).json(matches);
+  };
+
+  static findMatchesInProgress = async (
+    req: Request,
     res: Response,
   ) => {
-    const matches = await MatchService.findMatches();
-    res.status(200).json(matches);
+    const { inProgress } = req.query;
+    const matches = inProgress === 'false'
+      ? await MatchService.findMatchesInProgress(false)
+      : await MatchService.findMatchesInProgress(true);
+    return res.status(200).json(matches);
   };
 }
