@@ -97,4 +97,15 @@ describe('Testes de rota', () => {
       expect(response.body).to.be.deep.equal(teams);
     });
   });
+
+  describe('GET: /teams/:id', () => {
+    it('Quando é requisitado o id 5\n\t'
+    + 'Status: 200;\n\tResponse body: { id: 5, teamName: \'Cruzeiro\' }', async () => {
+      const response = await chai
+        .request(app)
+        .get('/teams/5');
+      expect(response.status).to.be.equal(200);
+      expect(response.body).to.be.deep.equal(teams[4]);
+    });
+  });
 });
