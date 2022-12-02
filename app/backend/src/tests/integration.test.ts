@@ -86,4 +86,15 @@ describe('Testes de rota', () => {
   //   expect(response.status).to.be.equal(401);
   //   expect(response.body.message).to.be.equal('Incorrect email or password');
   // });
+
+  describe('GET: /teams', () => {
+    it('Quando não há erro interno\n\t'
+    + 'Status: 200;\n\tResponse body: [{ id: 1, teamName: \'Avaí/Kindermann\' }, ...]', async () => {
+      const response = await chai
+        .request(app)
+        .get('/teams');
+      expect(response.status).to.be.equal(200);
+      expect(response.body).to.be.deep.equal(teams);
+    });
+  });
 });
