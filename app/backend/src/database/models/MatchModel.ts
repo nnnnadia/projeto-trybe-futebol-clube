@@ -20,22 +20,27 @@ MatchModel.init({
   },
   homeTeam: {
     allowNull: false,
+    field: 'home_team',
     type: INTEGER,
   },
   homeTeamGoals: {
     allowNull: false,
+    field: 'home_team_goals',
     type: INTEGER,
   },
   awayTeam: {
     allowNull: false,
+    field: 'away_team',
     type: INTEGER,
   },
   awayTeamGoals: {
     allowNull: false,
+    field: 'away_team_goals',
     type: INTEGER,
   },
   inProgress: {
     allowNull: false,
+    field: 'in_progress',
     type: BOOLEAN,
   },
 }, {
@@ -45,9 +50,9 @@ MatchModel.init({
   underscored: true,
 });
 
-TeamModel.belongsTo(MatchModel, { foreignKey: 'id', as: 'homeTeam' });
-TeamModel.belongsTo(MatchModel, { foreignKey: 'id', as: 'awayTeam' });
-MatchModel.hasOne(TeamModel, { foreignKey: 'homeTeam', as: 'id' });
-MatchModel.hasOne(TeamModel, { foreignKey: 'awayTeam', as: 'id' });
+MatchModel.belongsTo(TeamModel, { foreignKey: 'homeTeam', as: 'teamHome' });
+MatchModel.belongsTo(TeamModel, { foreignKey: 'awayTeam', as: 'teamAway' });
+TeamModel.hasMany(MatchModel, { foreignKey: 'homeTeam', as: 'teamHome' });
+TeamModel.hasMany(MatchModel, { foreignKey: 'awayTeam', as: 'teamAway' });
 
 export default MatchModel;
