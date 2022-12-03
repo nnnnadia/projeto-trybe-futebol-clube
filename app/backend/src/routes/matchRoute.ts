@@ -16,4 +16,6 @@ match.post(
   MatchController.createMatch,
 );
 
+match.patch('/:id/finish', MatchController.finishMatch);
+
 export default match;
