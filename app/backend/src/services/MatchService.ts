@@ -47,4 +47,12 @@ export default class MatchService {
       throw new StatusError(500);
     }
   };
+
+  static finishMatch = async (id: number) => {
+    try {
+      MatchModel.update({ inProgress: false }, { where: { id } });
+    } catch (error) {
+      throw new StatusError(500);
+    }
+  };
 }
