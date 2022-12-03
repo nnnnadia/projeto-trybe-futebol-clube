@@ -17,6 +17,4 @@ const teams = [
   { id: 16, teamName: 'São Paulo' },
 ];
 
-const tokenRegexp = /eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.([a-zA-Z]|\d)+\.([a-zA-Z]|\d|_|-)+/;
-
-export { teams, tokenRegexp };
+export default teams;
