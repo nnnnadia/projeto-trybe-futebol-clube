@@ -2,7 +2,9 @@ import * as chai from 'chai';
 import App from '../app';
 // @ts-ignore
 import chaiHttp = require('chai-http');
-import { teams, tokenRegexp } from './mockTeams';
+import teams from './mockTeams';
+import tokenRegexp from './mockUser';
+import { allMatches, finishedMatches, inProgressMatches } from './mockMatches';
 
 chai.use(chaiHttp);
 
@@ -89,7 +91,7 @@ describe('Testes de rota', () => {
 
   describe('GET: /teams', () => {
     it('Quando não há erro interno\n\t'
-    + 'Status: 200;\n\tResponse body: [{ id: 1, teamName: \'Avaí/Kindermann\' }, ...]', async () => {
+    + 'Status: 200;\n\tResponse body: [{ id: 1, teamName: \'Avaí/Kindermann\' }, ...]\n', async () => {
       const response = await chai
         .request(app)
         .get('/teams');
@@ -100,12 +102,45 @@ describe('Testes de rota', () => {
 
   describe('GET: /teams/:id', () => {
     it('Quando é requisitado o id 5\n\t'
-    + 'Status: 200;\n\tResponse body: { id: 5, teamName: \'Cruzeiro\' }', async () => {
+    + 'Status: 200;\n\tResponse body: { id: 5, teamName: \'Cruzeiro\' }\n', async () => {
       const response = await chai
         .request(app)
         .get('/teams/5');
       expect(response.status).to.be.equal(200);
       expect(response.body).to.be.deep.equal(teams[4]);
+    });
+  });
+
+  describe('GET: /matches', () => {
+    it('Quando não há erro interno\n\t'
+    + 'Status: 200;\n\tResponse body: [{ id: 1, homeTeam: 16, ... }, ...]\n', async () => {
+      const response = await chai
+        .request(app)
+        .get('/matches');
+      expect(response.status).to.be.equal(200);
+      expect(response.body).to.be.deep.equal(allMatches);
+    });
+  });
+
+  describe('GET: /matches?inProgress', () => {
+    it('Quando inProgress=true\n\t'
+    + 'Status: 200;\n\tResponse body: [{ id: 1, homeTeam: 16, ... }, ...]\n', async () => {
+      const response = await chai
+        .request(app)
+        .get('/matches?inProgress=true');
+      expect(response.status).to.be.equal(200);
+      expect(response.body).to.be.deep.equal(inProgressMatches);
+    });
+  });
+
+  describe('GET: /matches?inProgress', () => {
+    it('Quando inProgress=false\n\t'
+    + 'Status: 200;\n\tResponse body: [{ id: 1, homeTeam: 16, ... }, ...]\n', async () => {
+      const response = await chai
+        .request(app)
+        .get('/matches?inProgress=false');
+      expect(response.status).to.be.equal(200);
+      expect(response.body).to.be.deep.equal(finishedMatches);
     });
   });
 });
