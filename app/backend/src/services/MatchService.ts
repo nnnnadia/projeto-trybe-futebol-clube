@@ -50,9 +50,17 @@ export default class MatchService {
 
   static finishMatch = async (id: number) => {
     try {
-      MatchModel.update({ inProgress: false }, { where: { id } });
+      await MatchModel.update({ inProgress: false }, { where: { id } });
     } catch (error) {
       throw new StatusError(500);
+    }
+  };
+
+  static changeScore = async (id: number, homeTeamGoals: number, awayTeamGoals: number) => {
+    try {
+      await MatchModel.update({ homeTeamGoals, awayTeamGoals }, { where: { id } });
+    } catch (error) {
+      if (error instanceof Error) throw new StatusError(500, error.message);
     }
   };
 }
