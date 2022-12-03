@@ -8,7 +8,7 @@ export default class AuthJWTService {
       const { role } = AuthJWT.retrieveTokenData(token);
       return role;
     } catch (error) {
-      throw new StatusError(401, 'Unauthorized');
+      throw new StatusError(401, 'Token must be a valid token');
     }
   };
 
@@ -16,7 +16,7 @@ export default class AuthJWTService {
     try {
       AuthJWT.validateToken(token);
     } catch (error) {
-      throw new StatusError(401, 'Unauthorized');
+      throw new StatusError(401, 'Token must be a valid token');
     }
   };
 }
