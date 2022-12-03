@@ -12,7 +12,7 @@ export default class MatchService {
       });
       return matches;
     } catch (error) {
-      throw new StatusError(500, 'Internal error');
+      throw new StatusError(500);
     }
   };
 
@@ -27,7 +27,24 @@ export default class MatchService {
       });
       return matches;
     } catch (error) {
-      throw new StatusError(500, 'Internal error');
+      throw new StatusError(500);
+    }
+  };
+
+  static createMatch = async (
+    homeTeam: number,
+    awayTeam: number,
+    homeTeamGoals: number,
+    awayTeamGoals: number,
+  ) => {
+    try {
+      const inProgress = true;
+      const matchCreated = await MatchModel.create({
+        homeTeam, awayTeam, homeTeamGoals, awayTeamGoals, inProgress,
+      });
+      return matchCreated;
+    } catch (error) {
+      throw new StatusError(500);
     }
   };
 }
