@@ -25,4 +25,20 @@ export default class MatchController {
       : await MatchService.findMatchesInProgress(true);
     return res.status(200).json(matches);
   };
+
+  static createMatch = async (
+    req: Request,
+    res: Response,
+  ) => {
+    const {
+      homeTeam, awayTeam, homeTeamGoals, awayTeamGoals,
+    } = req.body;
+    const match = await MatchService.createMatch(
+      homeTeam,
+      awayTeam,
+      homeTeamGoals,
+      awayTeamGoals,
+    );
+    res.status(201).json(match);
+  };
 }
