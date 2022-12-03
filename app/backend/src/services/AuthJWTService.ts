@@ -11,4 +11,12 @@ export default class AuthJWTService {
       throw new StatusError(401, 'Unauthorized');
     }
   };
+
+  static validateToken = (token: string): void => {
+    try {
+      AuthJWT.validateToken(token);
+    } catch (error) {
+      throw new StatusError(401, 'Unauthorized');
+    }
+  };
 }
