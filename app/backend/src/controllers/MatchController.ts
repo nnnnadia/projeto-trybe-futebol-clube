@@ -8,9 +8,11 @@ export default class MatchController {
     next: NextFunction,
   ) => {
     const { inProgress } = req.query;
-    if (inProgress) next();
-    const matches = await MatchService.findMatches();
-    return res.status(200).json(matches);
+    if (!inProgress) {
+      const matches = await MatchService.findMatches();
+      return res.status(200).json(matches);
+    }
+    next();
   };
 
   static findMatchesInProgress = async (
