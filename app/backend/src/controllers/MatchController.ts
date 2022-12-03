@@ -47,7 +47,17 @@ export default class MatchController {
     res: Response,
   ) => {
     const { id } = req.params;
-    MatchService.finishMatch(+id);
+    await MatchService.finishMatch(+id);
     res.status(200).json({ message: 'Finished' });
+  };
+
+  static changeScore = async (
+    req: Request,
+    res: Response,
+  ) => {
+    const { homeTeamGoals, awayTeamGoals } = req.body;
+    const { id } = req.params;
+    await MatchService.changeScore(+id, homeTeamGoals, awayTeamGoals);
+    res.status(200).json({ message: 'Patched' });
   };
 }
