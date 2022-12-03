@@ -9,10 +9,10 @@ export default class TeamService {
         ? await TeamModel.findOne({ where: { id } })
         : await TeamModel.findAll();
       if (teams) return teams;
-      throw new StatusError(404, 'Team not found');
+      throw new StatusError(404, 'There is no team with such id!');
     } catch (error) {
       if (error instanceof StatusError) throw error;
-      throw new StatusError(500, 'Internal error');
+      throw new StatusError(500);
     }
   };
 }
