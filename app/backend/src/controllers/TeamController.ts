@@ -7,7 +7,9 @@ export default class TeamController {
     res: Response,
   ) => {
     const { id } = req.params;
-    const teams = await TeamService.findTeams(+id);
+    const teams = id
+      ? await TeamService.findTeamById(+id)
+      : await TeamService.findEveryTeam();
     res.status(200).json(teams);
   };
 }
