@@ -2,6 +2,7 @@ import MatchService from './MatchService';
 import TeamService from './TeamService';
 import ITeamLeaderboard from '../types/interfaces/ITeamLeaderboard';
 import IResult from '../types/interfaces/IResult';
+import IMatchResume from '../types/interfaces/IMatchResult';
 
 export default class TeamLeaderboard {
   readonly name: string;
@@ -55,14 +56,30 @@ export default class TeamLeaderboard {
     return ({ teamGoals, rivalGoals, teamScored });
   };
 
-  private static getHomeTeamMatchesResults = async (id: number) => {
+  private static getTeamMatchesResults = async (
+    id: number,
+    whichTeam: 'homeTeam' | 'awayTeam',
+  ): Promise<IMatchResume[]> => {
     const matchesResults = await MatchService.findMatchesInProgress(false);
+    const teamGoals: 'homeTeamGoals' | 'awayTeamGoals' = `${whichTeam}Goals`;
+    const rivalGoals: 'homeTeamGoals' | 'awayTeamGoals' = whichTeam === 'homeTeam'
+      ? 'awayTeamGoals'
+      : 'homeTeamGoals';
     return matchesResults
-      .filter((match) => match.homeTeam === id)
+      .filter((match) => match[whichTeam] === id)
       .map((match) => ({
-        teamGoals: match.homeTeamGoals,
-        rivalGoals: match.awayTeamGoals,
+        teamGoals: match[teamGoals],
+        rivalGoals: match[rivalGoals],
       }));
+  };
+
+  private static getMatches = async (
+    id: number,
+    whichTeam: 'homeTeam' | 'awayTeam',
+  ) => {
+    const teamMatchesResult = await TeamLeaderboard
+      .getTeamMatchesResults(id, whichTeam);
+    return teamMatchesResult;
   };
 
   private static winLossOrDraw = (pointsMade: number, fieldPoints: number) => {
@@ -70,8 +87,10 @@ export default class TeamLeaderboard {
     return 0;
   };
 
-  private static countHomeTeamPoints = async (id: number, accumulator: IResult) => {
-    const matches = await TeamLeaderboard.getHomeTeamMatchesResults(id);
+  private static populateAccumulator = async (
+    accumulator: IResult,
+    matches: IMatchResume[],
+  ) => {
     const matchesResume = matches
       .map(({ teamGoals, rivalGoals }) => TeamLeaderboard.getGamePoints(teamGoals, rivalGoals));
     matchesResume.forEach((resume) => {
@@ -94,9 +113,11 @@ export default class TeamLeaderboard {
     totalGames: number,
   ) => +((totalPoints / (totalGames * 3)) * 100).toFixed(2);
 
-  public static getTeamLeaderboard = async (id: number) => {
-    const accumulator = await TeamLeaderboard
-      .countHomeTeamPoints(id, TeamLeaderboard.getBlankAccumulator());
+  public static getTeamLeaderboard = async (id: number, whichTeam: 'homeTeam' | 'awayTeam') => {
+    const accumulator = await TeamLeaderboard.populateAccumulator(
+      TeamLeaderboard.getBlankAccumulator(),
+      await TeamLeaderboard.getMatches(id, whichTeam),
+    );
     const efficiency = TeamLeaderboard
       .getEfficiency(accumulator.totalPoints, accumulator.totalGames);
     const updatedLeaderboard = {
