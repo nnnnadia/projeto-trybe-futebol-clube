@@ -12,8 +12,8 @@ export default class MatchFieldsMiddleware {
     if (homeTeam === awayTeam) {
       next(new StatusError(422, 'It is not possible to create a match with two equal teams'));
     }
-    await TeamService.findTeams(homeTeam);
-    await TeamService.findTeams(awayTeam);
+    await TeamService.findTeamById(homeTeam);
+    await TeamService.findTeamById(awayTeam);
     next();
   };
 }
