@@ -1,8 +1,9 @@
 import MatchModel from '../database/models/MatchModel';
+import IMatch from '../types/interfaces/IMatch';
 import StatusError from '../utils/StatusError';
 
 export default class MatchService {
-  static findMatches = async () => {
+  static findMatches = async (): Promise<IMatch[]> => {
     try {
       const matches = await MatchModel.findAll({
         include: [{
@@ -16,7 +17,7 @@ export default class MatchService {
     }
   };
 
-  static findMatchesInProgress = async (inProgress: boolean) => {
+  static findMatchesInProgress = async (inProgress: boolean): Promise<IMatch[]> => {
     try {
       const matches = await MatchModel.findAll({
         where: { inProgress },
@@ -36,7 +37,7 @@ export default class MatchService {
     awayTeam: number,
     homeTeamGoals: number,
     awayTeamGoals: number,
-  ) => {
+  ): Promise<IMatch> => {
     try {
       const inProgress = true;
       const matchCreated = await MatchModel.create({
@@ -48,7 +49,7 @@ export default class MatchService {
     }
   };
 
-  static finishMatch = async (id: number) => {
+  static finishMatch = async (id: number): Promise<void> => {
     try {
       await MatchModel.update({ inProgress: false }, { where: { id } });
     } catch (error) {
@@ -56,7 +57,11 @@ export default class MatchService {
     }
   };
 
-  static changeScore = async (id: number, homeTeamGoals: number, awayTeamGoals: number) => {
+  static changeScore = async (
+    id: number,
+    homeTeamGoals: number,
+    awayTeamGoals: number,
+  ): Promise<void> => {
     try {
       await MatchModel.update({ homeTeamGoals, awayTeamGoals }, { where: { id } });
     } catch (error) {
