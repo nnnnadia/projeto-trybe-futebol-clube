@@ -113,10 +113,32 @@ export default class TeamLeaderboard {
     totalGames: number,
   ) => +((totalPoints / (totalGames * 3)) * 100).toFixed(2);
 
-  public static getTeamLeaderboard = async (id: number, whichTeam: 'homeTeam' | 'awayTeam') => {
+  public static getParcialTeamLeaderboard = async (
+    id: number,
+    whichTeam: 'homeTeam' | 'awayTeam',
+  ) => {
     const accumulator = await TeamLeaderboard.populateAccumulator(
       TeamLeaderboard.getBlankAccumulator(),
       await TeamLeaderboard.getMatches(id, whichTeam),
+    );
+    const efficiency = TeamLeaderboard
+      .getEfficiency(accumulator.totalPoints, accumulator.totalGames);
+    const updatedLeaderboard = {
+      name: await TeamLeaderboard.getTeamName(id),
+      ...accumulator,
+      efficiency,
+      goalsBalance: accumulator.goalsFavor - accumulator.goalsOwn,
+    };
+    return new TeamLeaderboard(updatedLeaderboard);
+  };
+
+  public static getFullTeamLeaderboard = async (id: number) => {
+    const accumulator = await TeamLeaderboard.populateAccumulator(
+      TeamLeaderboard.getBlankAccumulator(),
+      [
+        ...await TeamLeaderboard.getMatches(id, 'homeTeam'),
+        ...await TeamLeaderboard.getMatches(id, 'awayTeam'),
+      ],
     );
     const efficiency = TeamLeaderboard
       .getEfficiency(accumulator.totalPoints, accumulator.totalGames);
