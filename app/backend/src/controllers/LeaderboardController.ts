@@ -17,4 +17,12 @@ export default class LeaderboardController {
     const leaderboards = await LeaderboardService.getOrderedLeaderboards(false, true);
     res.status(200).json(leaderboards);
   };
+
+  static getFullTeamsLeaderboard = async (
+    _req: Request,
+    res: Response,
+  ) => {
+    const leaderboards = await LeaderboardService.getOrderedLeaderboards(true, true);
+    res.status(200).json(leaderboards);
+  };
 }
